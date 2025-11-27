@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Falk's Tap Drill Calculator</title>
+    <style>
+        :root {
+            --bg: #1a1a2e;
+            --bg-light: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #eee;
+            --text-dim: #aaa;
+            --success: #4ade80;
+            --warning: #fbbf24;
+            --danger: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+            padding: 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--highlight);
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .standalone-note {
+            text-align: center;
+            color: var(--success);
+            font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .controls {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .slider-container {
+            margin-bottom: 1rem;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--highlight);
+            font-family: monospace;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            height: 40px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--accent);
+            outline: none;
+            margin-top: 16px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--highlight);
+            cursor: pointer;
+            border: 3px solid var(--text);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--highlight);
+            cursor: pointer;
+            border: 3px solid var(--text);
+        }
+
+        .slider-marks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 4px;
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        .presets {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .preset-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--text);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .preset-btn:hover {
+            background: var(--accent);
+            border-color: var(--highlight);
+        }
+
+        .preset-btn.active {
+            background: var(--highlight);
+            border-color: var(--highlight);
+        }
+
+        #warning-container {
+            min-height: 52px;
+            margin-top: 1rem;
+        }
+
+        .warning-box {
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .warning-box.danger {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--danger);
+            color: #fca5a5;
+        }
+
+        .warning-box.warning {
+            background: rgba(251, 191, 36, 0.2);
+            border: 1px solid var(--warning);
+            color: #fde68a;
+        }
+
+        .warning-box.success {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid var(--success);
+            color: #bbf7d0;
+        }
+
+        .tables-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .table-section {
+            background: var(--bg-light);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: var(--accent);
+            padding: 0.75rem 1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            background: var(--bg);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th {
+            background: var(--bg);
+            padding: 0.5rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-dim);
+            position: sticky;
+            top: 0;
+        }
+
+        td {
+            padding: 0.5rem;
+            border-bottom: 1px solid var(--accent);
+        }
+
+        tr:hover {
+            background: rgba(233, 69, 96, 0.1);
+        }
+
+        .drill-metric {
+            font-weight: bold;
+            cursor: help;
+            color: var(--text);
+        }
+
+        .drill-inch {
+            color: var(--text);
+            cursor: help;
+        }
+
+        .drill-frac {
+            cursor: help;
+        }
+
+        .drill-letter, .drill-number {
+            font-weight: 500;
+            cursor: help;
+        }
+
+        .no-match {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        .table-wrap {
+            padding: 0;
+        }
+
+        .legend-section {
+            max-width: 800px;
+            margin: 1.5rem auto;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+        }
+
+        .legend-section strong {
+            display: block;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .color-gradient {
+            max-width: 400px;
+        }
+
+        .gradient-bar {
+            height: 12px;
+            border-radius: 6px;
+            background: linear-gradient(to right,
+                rgb(74,222,128) 0%,
+                rgb(170,170,170) 33%,
+                rgb(185,28,28) 100%);
+        }
+
+        .gradient-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            color: var(--text-dim);
+        }
+
+        .custom-thread-section {
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+        }
+
+        .custom-thread-section > strong {
+            display: block;
+            margin-bottom: 0.75rem;
+            color: var(--highlight);
+        }
+
+        .custom-layout {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .custom-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            min-width: 200px;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .radio-group input[type="radio"] {
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .input-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .input-row label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            width: 65px;
+        }
+
+        .input-row input {
+            padding: 0.4rem 0.5rem;
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+            width: 90px;
+        }
+
+        .input-row input:focus {
+            outline: none;
+            border-color: var(--highlight);
+        }
+
+        .input-unit {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            width: 30px;
+        }
+
+        #custom-result {
+            flex: 1;
+            padding: 0.75rem;
+            background: var(--bg);
+            border-radius: 4px;
+            font-family: monospace;
+            display: none;
+        }
+
+        #custom-result.visible {
+            display: block;
+        }
+
+        #custom-result .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 1.75rem;
+            padding: 0.2rem 0;
+            border-bottom: 1px solid var(--accent);
+            font-size: 0.9rem;
+        }
+
+        #custom-result .result-row:last-child {
+            border-bottom: none;
+        }
+
+        #custom-result .result-label {
+            color: var(--text-dim);
+        }
+
+        #custom-result .result-row strong {
+            color: var(--text);
+        }
+
+        @media (max-width: 500px) {
+            .custom-layout {
+                flex-direction: column;
+            }
+            #custom-result {
+                width: 100%;
+            }
+        }
+
+        .thread-size {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .formula-info {
+            max-width: 800px;
+            margin: 1.5rem auto;
+            padding: 1rem;
+            background: var(--bg-light);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        .formula-info code {
+            background: var(--bg);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: monospace;
+            color: var(--text);
+        }
+
+        @media (max-width: 900px) {
+            .tables-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .subtitle {
+                font-size: 0.8rem;
+            }
+
+            .standalone-note {
+                font-size: 0.7rem;
+            }
+
+            .controls {
+                padding: 1rem;
+            }
+
+            .slider-value {
+                font-size: 1.5rem;
+            }
+
+            .presets {
+                justify-content: center;
+            }
+
+            .preset-btn {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.75rem;
+            }
+
+            .table-section {
+                border-radius: 4px;
+            }
+
+            .table-wrap {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            table {
+                font-size: 0.7rem;
+                min-width: 380px;
+            }
+
+            td, th {
+                padding: 0.3rem 0.25rem;
+            }
+
+            th {
+                font-size: 0.65rem;
+            }
+
+            .custom-thread-section,
+            .formula-info,
+            .legend-section {
+                padding: 0.75rem;
+                font-size: 0.8rem;
+            }
+
+            .radio-group {
+                gap: 1rem;
+            }
+
+            .radio-group label {
+                font-size: 0.8rem;
+            }
+
+            .input-row label {
+                width: 55px;
+                font-size: 0.75rem;
+            }
+
+            .input-row input {
+                width: 70px;
+                font-size: 0.8rem;
+                padding: 0.3rem;
+            }
+
+            #custom-result {
+                font-size: 0.8rem;
+            }
+
+            #custom-result .result-row {
+                min-height: 1.5rem;
+                font-size: 0.8rem;
+            }
+
+            .gradient-bar {
+                height: 10px;
+            }
+
+            .gradient-labels {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .presets {
+                gap: 0.3rem;
+            }
+
+            .preset-btn {
+                padding: 0.3rem 0.5rem;
+                font-size: 0.7rem;
+            }
+
+            .radio-group {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+
+            table {
+                font-size: 0.65rem;
+                min-width: 340px;
+            }
+        }
+
+        /* Print stylesheet */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+                font-size: 10pt;
+            }
+
+            h1 {
+                color: black;
+                font-size: 16pt;
+                margin-bottom: 0.25rem;
+            }
+
+            .subtitle {
+                color: #444;
+                margin-bottom: 0.25rem;
+            }
+
+            .standalone-note {
+                display: none;
+            }
+
+            .controls {
+                background: none;
+                padding: 0.5rem 0;
+                border-bottom: 1px solid #ccc;
+                margin-bottom: 0.5rem;
+            }
+
+            .slider-container,
+            .presets,
+            #warning-container {
+                display: none;
+            }
+
+            /* Show current percentage as text for print */
+            .controls::after {
+                content: "Thread Engagement: " attr(data-pct) "%";
+                font-size: 14pt;
+                font-weight: bold;
+            }
+
+            .custom-thread-section {
+                display: none;
+            }
+
+            .tables-container {
+                display: block;
+                max-width: 100%;
+            }
+
+            .table-section {
+                background: none;
+                page-break-inside: avoid;
+                margin-bottom: 1rem;
+                border: 1px solid #ccc;
+            }
+
+            .table-header {
+                background: #eee;
+                color: black;
+                padding: 0.4rem 0.5rem;
+                font-size: 11pt;
+            }
+
+            .table-header .badge {
+                background: #ddd;
+                color: #444;
+                font-size: 8pt;
+            }
+
+            table {
+                font-size: 9pt;
+                border-collapse: collapse;
+                width: 100%;
+            }
+
+            th {
+                background: #f5f5f5;
+                color: black;
+                font-size: 8pt;
+                padding: 0.3rem;
+                border: 1px solid #ccc;
+            }
+
+            td {
+                padding: 0.25rem 0.3rem;
+                border: 1px solid #ccc;
+            }
+
+            tr:hover {
+                background: none;
+            }
+
+            .drill-metric,
+            .drill-inch,
+            .drill-frac,
+            .drill-letter,
+            .drill-number {
+                font-weight: normal;
+                color: black !important;
+            }
+
+            .no-match {
+                color: #666 !important;
+            }
+
+            .legend-section {
+                display: none;
+            }
+
+            .formula-info {
+                background: #f9f9f9;
+                border: 1px solid #ddd;
+                padding: 0.5rem;
+                font-size: 8pt;
+                page-break-inside: avoid;
+                color: black;
+            }
+
+            .formula-info code {
+                background: #eee;
+                color: black;
+            }
+
+            .formula-info strong {
+                color: black;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <h1>Falk's Tap Drill Calculator</h1>
+    <p class="subtitle">Interactive thread percentage calculator with drill size lookup</p>
+    <p class="standalone-note">This is a standalone HTML file with zero dependencies. Save this page (Ctrl+S) to use offline — no internet required.</p>
+
+    <div class="controls">
+        <div class="slider-container">
+            <div class="slider-header">
+                <span>Thread Engagement</span>
+                <span class="slider-value"><span id="pct-value">65</span>%</span>
+            </div>
+            <div class="slider-wrapper">
+                <input type="range" id="pct-slider" min="40" max="85" value="65" step="1">
+            </div>
+            <div class="slider-marks">
+                <span>40%</span>
+                <span>55%</span>
+                <span>70%</span>
+                <span>85%</span>
+            </div>
+        </div>
+
+        <div class="presets">
+            <button class="preset-btn" data-pct="50">50% Stainless/Ti</button>
+            <button class="preset-btn" data-pct="55">55% Hard Alloys</button>
+            <button class="preset-btn" data-pct="60">60% Production</button>
+            <button class="preset-btn active" data-pct="65">65% General</button>
+            <button class="preset-btn" data-pct="75">75% Standard</button>
+        </div>
+
+        <div id="warning-container"></div>
+    </div>
+
+    <div class="custom-thread-section">
+        <strong>Custom Thread Calculator</strong>
+        <div class="custom-layout">
+            <div class="custom-inputs">
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="custom-type" value="metric" checked>
+                        Metric (mm)
+                    </label>
+                    <label>
+                        <input type="radio" name="custom-type" value="inch">
+                        Inch (TPI)
+                    </label>
+                </div>
+                <div class="input-row">
+                    <label for="custom-major">Major Ø:</label>
+                    <input type="number" id="custom-major" step="0.01" placeholder="e.g. 20" value="20">
+                    <span class="input-unit" id="major-unit">mm</span>
+                </div>
+                <div class="input-row">
+                    <label for="custom-pitch">Pitch:</label>
+                    <input type="number" id="custom-pitch" step="0.01" placeholder="e.g. 1.5" value="1.5">
+                    <span class="input-unit" id="pitch-unit">mm</span>
+                </div>
+            </div>
+            <div id="custom-result"></div>
+        </div>
+    </div>
+
+    <div class="tables-container">
+        <div class="table-section">
+            <div class="table-header">
+                UNC (Coarse)
+                <span class="badge">Unified National Coarse</span>
+            </div>
+            <div class="table-wrap">
+                <table id="unc-table">
+                    <thead>
+                        <tr>
+                            <th>Thread</th>
+                            <th>Metric</th>
+                            <th>Decimal</th>
+                            <th>Frac</th>
+                            <th>Letter/#</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <div class="table-header">
+                UNF (Fine)
+                <span class="badge">Unified National Fine</span>
+            </div>
+            <div class="table-wrap">
+                <table id="unf-table">
+                    <thead>
+                        <tr>
+                            <th>Thread</th>
+                            <th>Metric</th>
+                            <th>Decimal</th>
+                            <th>Frac</th>
+                            <th>Letter/#</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <div class="table-header">
+                Metric Coarse
+                <span class="badge">ISO Standard</span>
+            </div>
+            <div class="table-wrap">
+                <table id="metric-table">
+                    <thead>
+                        <tr>
+                            <th>Thread</th>
+                            <th>Metric</th>
+                            <th>Decimal</th>
+                            <th>Frac</th>
+                            <th>Letter/#</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="formula-info">
+        <strong>Formulas</strong> (Machinery's Handbook 29th Ed, p.2030):<br>
+        Unified: <code>Hole = Major − (1.08253 × %Thread / TPI)</code><br>
+        Metric: <code>Hole = Major − (1.08253 × Pitch × %Thread)</code><br><br>
+
+        <strong>Drill Matching:</strong>
+        Letter (A-Z) and Number (#1-#80) drills shown when within ±0.08 mm (±3 thou).
+        Fractional drills (1/64") always shown — see color legend below.
+        Hover over any drill size for exact dimensions and deviations.<br><br>
+
+        <strong>Sources &amp; References:</strong>
+        <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
+            <li><em>Machinery's Handbook</em> 29th Ed, p.2020: "Tests have shown that any increase
+            in the percentage of full thread over 60 per cent does not significantly increase the
+            strength of the thread."</li>
+            <li><em>Machinery's Handbook</em> 29th Ed, p.2020: "Often, a 55 to 60 per cent thread
+            is satisfactory, although 75 per cent threads are commonly used to provide an extra
+            measure of safety."</li>
+            <li><em>Machinery's Handbook</em> 29th Ed, p.2020: "The tap drill should not be smaller
+            than is necessary to give the required strength to the thread as even a very small
+            decrease in the diameter of the drill will increase the torque required and the
+            possibility of broken taps."</li>
+            <li><em>Machinery's Handbook</em> 29th Ed, p.2018 (Stainless): "Austenitic stainless
+            steels are very difficult to tap because of their high resistance to cutting and their
+            great tendency to work harden."</li>
+        </ul>
+    </div>
+
+    <div class="legend-section">
+        <strong>Color Legend</strong>
+        <div class="color-gradient">
+            <div class="gradient-bar"></div>
+            <div class="gradient-labels">
+                <span>0 mm</span>
+                <span>0.05 mm</span>
+                <span>0.15 mm+</span>
+            </div>
+            <div class="gradient-labels">
+                <span style="color:rgb(74,222,128)">● Perfect</span>
+                <span style="color:rgb(170,170,170)">● Acceptable</span>
+                <span style="color:rgb(185,28,28)">● Poor</span>
+            </div>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.75rem;">
+            Color smoothly transitions based on deviation from ideal size. Letter/# shows "–" if deviation &gt;0.15 mm.
+        </p>
+    </div>
+
+    <script>
+    // ==========================================================================
+    // CONSTANTS AND DATA
+    // ==========================================================================
+
+    // Tap drill factor: 2 × 5H/8 where H = √3/2 × P (from Machinery's Handbook)
+    const TAP_DRILL_FACTOR = 1.0825317547305483;
+
+    // UNC Threads: [name, major_dia_inch, tpi]
+    const UNC_THREADS = [
+        ["#0", 0.0600, 80],
+        ["#1", 0.0730, 64],
+        ["#2", 0.0860, 56],
+        ["#3", 0.0990, 48],
+        ["#4", 0.1120, 40],
+        ["#5", 0.1250, 40],
+        ["#6", 0.1380, 32],
+        ["#8", 0.1640, 32],
+        ["#10", 0.1900, 24],
+        ["#12", 0.2160, 24],
+        ["1/4", 0.2500, 20],
+        ["5/16", 0.3125, 18],
+        ["3/8", 0.3750, 16],
+        ["7/16", 0.4375, 14],
+        ["1/2", 0.5000, 13],
+        ["9/16", 0.5625, 12],
+        ["5/8", 0.6250, 11],
+        ["3/4", 0.7500, 10],
+        ["7/8", 0.8750, 9],
+        ["1", 1.0000, 8],
+    ];
+
+    // UNF Threads: [name, major_dia_inch, tpi]
+    const UNF_THREADS = [
+        ["#0", 0.0600, 80],
+        ["#1", 0.0730, 72],
+        ["#2", 0.0860, 64],
+        ["#3", 0.0990, 56],
+        ["#4", 0.1120, 48],
+        ["#5", 0.1250, 44],
+        ["#6", 0.1380, 40],
+        ["#8", 0.1640, 36],
+        ["#10", 0.1900, 32],
+        ["#12", 0.2160, 28],
+        ["1/4", 0.2500, 28],
+        ["5/16", 0.3125, 24],
+        ["3/8", 0.3750, 24],
+        ["7/16", 0.4375, 20],
+        ["1/2", 0.5000, 20],
+        ["9/16", 0.5625, 18],
+        ["5/8", 0.6250, 18],
+        ["3/4", 0.7500, 16],
+        ["7/8", 0.8750, 14],
+        ["1", 1.0000, 12],
+    ];
+
+    // Metric Coarse: [major_mm, pitch_mm]
+    const METRIC_COARSE = [
+        [1.6, 0.35],
+        [2.0, 0.40],
+        [2.5, 0.45],
+        [3.0, 0.50],
+        [3.5, 0.60],
+        [4.0, 0.70],
+        [5.0, 0.80],
+        [6.0, 1.00],
+        [8.0, 1.25],
+        [10.0, 1.50],
+        [12.0, 1.75],
+        [14.0, 2.00],
+        [16.0, 2.00],
+        [18.0, 2.50],
+        [20.0, 2.50],
+        [24.0, 3.00],
+        [30.0, 3.50],
+    ];
+
+    // Number drills: [number, size_inch]
+    const NUMBER_DRILLS = [
+        [80, 0.0135], [79, 0.0145], [78, 0.0160], [77, 0.0180], [76, 0.0200],
+        [75, 0.0210], [74, 0.0225], [73, 0.0240], [72, 0.0250], [71, 0.0260],
+        [70, 0.0280], [69, 0.0292], [68, 0.0310], [67, 0.0320], [66, 0.0330],
+        [65, 0.0350], [64, 0.0360], [63, 0.0370], [62, 0.0380], [61, 0.0390],
+        [60, 0.0400], [59, 0.0410], [58, 0.0420], [57, 0.0430], [56, 0.0465],
+        [55, 0.0520], [54, 0.0550], [53, 0.0595], [52, 0.0635], [51, 0.0670],
+        [50, 0.0700], [49, 0.0730], [48, 0.0760], [47, 0.0785], [46, 0.0810],
+        [45, 0.0820], [44, 0.0860], [43, 0.0890], [42, 0.0935], [41, 0.0960],
+        [40, 0.0980], [39, 0.0995], [38, 0.1015], [37, 0.1040], [36, 0.1065],
+        [35, 0.1100], [34, 0.1110], [33, 0.1130], [32, 0.1160], [31, 0.1200],
+        [30, 0.1285], [29, 0.1360], [28, 0.1405], [27, 0.1440], [26, 0.1470],
+        [25, 0.1495], [24, 0.1520], [23, 0.1540], [22, 0.1570], [21, 0.1590],
+        [20, 0.1610], [19, 0.1660], [18, 0.1695], [17, 0.1730], [16, 0.1770],
+        [15, 0.1800], [14, 0.1820], [13, 0.1850], [12, 0.1890], [11, 0.1910],
+        [10, 0.1935], [9, 0.1960], [8, 0.1990], [7, 0.2010], [6, 0.2040],
+        [5, 0.2055], [4, 0.2090], [3, 0.2130], [2, 0.2210], [1, 0.2280],
+    ];
+
+    // Letter drills: [letter, size_inch]
+    const LETTER_DRILLS = [
+        ['A', 0.2340], ['B', 0.2380], ['C', 0.2420], ['D', 0.2460], ['E', 0.2500],
+        ['F', 0.2570], ['G', 0.2610], ['H', 0.2660], ['I', 0.2720], ['J', 0.2770],
+        ['K', 0.2810], ['L', 0.2900], ['M', 0.2950], ['N', 0.3020], ['O', 0.3160],
+        ['P', 0.3230], ['Q', 0.3320], ['R', 0.3390], ['S', 0.3480], ['T', 0.3580],
+        ['U', 0.3680], ['V', 0.3770], ['W', 0.3860], ['X', 0.3970], ['Y', 0.4040],
+        ['Z', 0.4130],
+    ];
+
+    // Standard metric drill sizes (mm)
+    const METRIC_DRILLS = [
+        0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95,
+        1.00, 1.05, 1.10, 1.15, 1.20, 1.25, 1.30, 1.35, 1.40, 1.45,
+        1.50, 1.55, 1.60, 1.65, 1.70, 1.75, 1.80, 1.85, 1.90, 1.95,
+        2.00, 2.05, 2.10, 2.15, 2.20, 2.25, 2.30, 2.35, 2.40, 2.45,
+        2.50, 2.55, 2.60, 2.65, 2.70, 2.75, 2.80, 2.85, 2.90, 2.95,
+        3.00, 3.10, 3.20, 3.30, 3.40, 3.50, 3.60, 3.70, 3.80, 3.90,
+        4.00, 4.10, 4.20, 4.30, 4.40, 4.50, 4.60, 4.70, 4.80, 4.90,
+        5.00, 5.10, 5.20, 5.30, 5.40, 5.50, 5.60, 5.70, 5.80, 5.90,
+        6.00, 6.10, 6.20, 6.30, 6.40, 6.50, 6.60, 6.70, 6.80, 6.90,
+        7.00, 7.10, 7.20, 7.30, 7.40, 7.50, 7.60, 7.70, 7.80, 7.90,
+        8.00, 8.20, 8.50, 8.80, 9.00, 9.50, 10.0, 10.5, 11.0, 11.5,
+        12.0, 12.5, 13.0, 13.5, 14.0, 14.5, 15.0, 16.0, 17.0, 18.0,
+        19.0, 20.0, 21.0, 22.0, 23.0, 24.0, 25.0, 26.0, 27.0, 28.0,
+    ];
+
+    // Fractional drills: computed dynamically for any size (1/64" increments)
+
+    // ==========================================================================
+    // DRILL SIZE LOOKUP API
+    // ==========================================================================
+
+    /**
+     * Find all matching drill sizes for a given diameter in mm
+     * @param {number} targetMm - Target diameter in mm
+     * @param {number} tolerance - Max acceptable difference (mm) for letter/number drills
+     * @returns {Object} - {metric, decimalInch, letter, number, fractional, targetMm, targetInch}
+     */
+    function findDrillSizes(targetMm, tolerance = 0.08) {
+        const targetInch = targetMm / 25.4;
+        const result = {
+            metric: null,
+            decimalInch: null,
+            letter: null,
+            number: null,
+            fractional: null,
+            targetMm: targetMm,
+            targetInch: targetInch
+        };
+
+        // Helper to format deviation string
+        // 1 thou (mil) = 0.001" = 0.0254 mm
+        // 1 tenth = 0.0001" = 0.00254 mm = 2.54 µm
+        function formatDiff(diffMm) {
+            const sign = diffMm >= 0 ? '+' : '';
+            const absMm = Math.abs(diffMm);
+            const diffThou = diffMm / 0.0254; // thousandths of inch
+            return `${sign}${diffMm.toFixed(3)} mm (${sign}${diffThou.toFixed(1)} thou)`;
+        }
+
+        // Compute lerped color based on deviation
+        // 0mm = green, 0.05mm = gray, 0.15mm+ = dark red
+        function getQualityColor(absDiffMm) {
+            // Green: rgb(74, 222, 128) - var(--success)
+            // Gray: rgb(170, 170, 170) - var(--text-dim)
+            // Dark Red: rgb(185, 28, 28) - #b91c1c
+            const green = [74, 222, 128];
+            const gray = [170, 170, 170];
+            const red = [185, 28, 28];
+
+            let r, g, b;
+            if (absDiffMm <= 0.05) {
+                // Lerp green to gray (0 to 0.05mm)
+                const t = absDiffMm / 0.05;
+                r = Math.round(green[0] + (gray[0] - green[0]) * t);
+                g = Math.round(green[1] + (gray[1] - green[1]) * t);
+                b = Math.round(green[2] + (gray[2] - green[2]) * t);
+            } else if (absDiffMm <= 0.15) {
+                // Lerp gray to red (0.05 to 0.15mm)
+                const t = (absDiffMm - 0.05) / 0.10;
+                r = Math.round(gray[0] + (red[0] - gray[0]) * t);
+                g = Math.round(gray[1] + (red[1] - gray[1]) * t);
+                b = Math.round(gray[2] + (red[2] - gray[2]) * t);
+            } else {
+                // Solid red beyond 0.15mm
+                [r, g, b] = red;
+            }
+            return `rgb(${r},${g},${b})`;
+        }
+
+        // Find closest metric drill
+        let closestMetric = null;
+        let closestMetricDiff = Infinity;
+        for (const size of METRIC_DRILLS) {
+            const diff = Math.abs(size - targetMm);
+            if (diff < closestMetricDiff) {
+                closestMetricDiff = diff;
+                closestMetric = size;
+            }
+        }
+        if (closestMetricDiff <= tolerance) {
+            const diffMm = closestMetric - targetMm;
+            const absDiffMetric = Math.abs(diffMm);
+            result.metric = {
+                size: closestMetric,
+                sizeMm: closestMetric,
+                sizeInch: closestMetric / 25.4,
+                diff: diffMm,
+                absDiff: absDiffMetric,
+                diffStr: formatDiff(diffMm),
+                display: closestMetric.toFixed(2) + " mm",
+                color: getQualityColor(absDiffMetric)
+            };
+        }
+
+        // Find closest number drill
+        let closestNum = null;
+        let closestNumDiff = Infinity;
+        for (const [num, size] of NUMBER_DRILLS) {
+            const diff = Math.abs(size - targetInch);
+            if (diff < closestNumDiff) {
+                closestNumDiff = diff;
+                closestNum = [num, size];
+            }
+        }
+        if (closestNumDiff * 25.4 <= tolerance) {
+            const diffMm = (closestNum[1] - targetInch) * 25.4;
+            const absDiffNum = Math.abs(diffMm);
+            result.number = {
+                num: closestNum[0],
+                size: closestNum[1],
+                sizeMm: closestNum[1] * 25.4,
+                sizeInch: closestNum[1],
+                diff: diffMm,
+                absDiff: absDiffNum,
+                diffStr: formatDiff(diffMm),
+                display: "#" + closestNum[0],
+                color: getQualityColor(absDiffNum)
+            };
+        }
+
+        // Find closest letter drill
+        let closestLetter = null;
+        let closestLetterDiff = Infinity;
+        for (const [letter, size] of LETTER_DRILLS) {
+            const diff = Math.abs(size - targetInch);
+            if (diff < closestLetterDiff) {
+                closestLetterDiff = diff;
+                closestLetter = [letter, size];
+            }
+        }
+        if (closestLetterDiff * 25.4 <= tolerance) {
+            const diffMm = (closestLetter[1] - targetInch) * 25.4;
+            const absDiffLetter = Math.abs(diffMm);
+            result.letter = {
+                letter: closestLetter[0],
+                size: closestLetter[1],
+                sizeMm: closestLetter[1] * 25.4,
+                sizeInch: closestLetter[1],
+                diff: diffMm,
+                absDiff: absDiffLetter,
+                diffStr: formatDiff(diffMm),
+                display: closestLetter[0],
+                color: getQualityColor(absDiffLetter)
+            };
+        }
+
+        // Find closest fractional drill (1/64" increments, any size)
+        // Round to nearest 64th
+        const sixtyFourths = Math.round(targetInch * 64);
+        const fracSizeInch = sixtyFourths / 64;
+        const fracDiffMm = (fracSizeInch - targetInch) * 25.4;
+        const absDiff = Math.abs(fracDiffMm);
+
+        // Reduce fraction to lowest terms and format as X-Y/Z" for sizes > 1"
+        const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+        const wholeInches = Math.floor(Math.abs(sixtyFourths) / 64);
+        const remainingSixtyFourths = Math.abs(sixtyFourths) % 64;
+        let fracDisplay;
+        if (remainingSixtyFourths === 0) {
+            // Exact whole inches (1", 2", etc.)
+            fracDisplay = wholeInches + '"';
+        } else {
+            const g = gcd(remainingSixtyFourths, 64);
+            const numer = remainingSixtyFourths / g;
+            const denom = 64 / g;
+            if (wholeInches > 0) {
+                // Mixed number: 1-1/2", 2-3/4", etc.
+                fracDisplay = wholeInches + '-' + numer + '/' + denom + '"';
+            } else {
+                // Pure fraction: 1/2", 3/4", etc.
+                fracDisplay = numer + '/' + denom + '"';
+            }
+        }
+
+        result.fractional = {
+            num: sixtyFourths,
+            size: fracSizeInch,
+            sizeMm: fracSizeInch * 25.4,
+            sizeInch: fracSizeInch,
+            diff: fracDiffMm,
+            absDiff: absDiff,
+            diffStr: formatDiff(fracDiffMm),
+            display: fracDisplay,
+            color: getQualityColor(absDiff)
+        };
+
+        // Always provide decimal inch
+        result.decimalInch = {
+            size: targetInch,
+            sizeMm: targetMm,
+            display: targetInch.toFixed(4) + '"'
+        };
+
+        return result;
+    }
+
+    /**
+     * Get the best "letter or number" drill for display
+     */
+    function getBestLetterOrNumber(drills) {
+        // Prefer whichever is closer to target - NEVER return fractional
+        if (drills.letter && drills.number) {
+            if (Math.abs(drills.letter.diff) <= Math.abs(drills.number.diff)) {
+                return drills.letter;
+            }
+            return drills.number;
+        }
+        return drills.letter || drills.number || null;
+    }
+
+    // ==========================================================================
+    // TAP DRILL CALCULATIONS
+    // ==========================================================================
+
+    /**
+     * Calculate tap drill size for imperial threads
+     * @param {number} majorInch - Major diameter in inches
+     * @param {number} tpi - Threads per inch
+     * @param {number} threadPct - Thread percentage (0.0-1.0)
+     * @returns {number} - Tap drill diameter in inches
+     */
+    function calcTapDrillInch(majorInch, tpi, threadPct) {
+        return majorInch - (TAP_DRILL_FACTOR * threadPct / tpi);
+    }
+
+    /**
+     * Calculate tap drill size for metric threads
+     * @param {number} majorMm - Major diameter in mm
+     * @param {number} pitchMm - Pitch in mm
+     * @param {number} threadPct - Thread percentage (0.0-1.0)
+     * @returns {number} - Tap drill diameter in mm
+     */
+    function calcTapDrillMm(majorMm, pitchMm, threadPct) {
+        return majorMm - (TAP_DRILL_FACTOR * pitchMm * threadPct);
+    }
+
+    // ==========================================================================
+    // UI FUNCTIONS
+    // ==========================================================================
+
+    const slider = document.getElementById('pct-slider');
+    const pctValue = document.getElementById('pct-value');
+    const warningContainer = document.getElementById('warning-container');
+    const presetBtns = document.querySelectorAll('.preset-btn');
+
+    function updateWarning(pct) {
+        let cls, icon, msg;
+        if (pct >= 75) {
+            cls = 'danger';
+            icon = '⚠️';
+            msg = 'High tap breakage risk. No strength benefit over 60% (MH p.2020).';
+        } else if (pct >= 65) {
+            cls = 'warning';
+            icon = '⚡';
+            msg = 'Above 60% threshold — diminishing returns, higher torque required.';
+        } else if (pct >= 55) {
+            cls = 'success';
+            icon = '✓';
+            msg = 'Recommended range. Good balance of strength and tapping torque.';
+        } else if (pct >= 50) {
+            cls = 'success';
+            icon = '✓';
+            msg = 'Light engagement. Good for stainless and difficult materials.';
+        } else {
+            cls = 'warning';
+            icon = '⚡';
+            msg = 'Very light engagement. Verify adequate for load requirements.';
+        }
+        warningContainer.innerHTML = `<div class="warning-box ${cls}"><strong>${icon} ${pct}%:</strong> ${msg}</div>`;
+    }
+
+    function formatDrillCell(drills, type) {
+        // Helper to build consistent tooltip text
+        function tooltip(drill, isExact = false) {
+            if (!drill) return '';
+            const mm = drill.sizeMm ? drill.sizeMm.toFixed(3) : (drill.size * 25.4).toFixed(3);
+            const inch = drill.sizeInch ? drill.sizeInch.toFixed(4) : drill.size.toFixed(4);
+            if (isExact) {
+                return `Exact: ${mm} mm = ${inch}"`;
+            }
+            let tip = `Drill: ${mm} mm = ${inch}"`;
+            if (drill.diffStr) {
+                tip += `&#10;Deviation: ${drill.diffStr}`;
+            }
+            return tip;
+        }
+
+        if (type === 'metric') {
+            // Exact calculated value
+            const tip = tooltip({ sizeMm: drills.targetMm, sizeInch: drills.targetInch }, true);
+            return `<span class="drill-metric" title="${tip}">${drills.targetMm.toFixed(2)} mm</span>`;
+        }
+
+        if (type === 'inch') {
+            // Exact calculated decimal inch
+            const tip = tooltip({ sizeMm: drills.targetMm, sizeInch: drills.targetInch }, true);
+            return `<span class="drill-inch" title="${tip}">${drills.decimalInch.display}</span>`;
+        }
+
+        if (type === 'frac') {
+            // Fractional drill with lerped color
+            if (drills.fractional) {
+                const tip = tooltip(drills.fractional);
+                return `<span class="drill-frac" style="color:${drills.fractional.color}" title="${tip}">${drills.fractional.display}</span>`;
+            }
+            return `<span class="no-match">—</span>`;
+        }
+
+        if (type === 'letter') {
+            const best = getBestLetterOrNumber(drills);
+            if (best) {
+                // Show "–" if the match is poor (absDiff > 0.15mm)
+                if (best.absDiff > 0.15) {
+                    const tip = `Closest: ${best.display}&#10;${tooltip(best).replace('Drill: ', '')}&#10;Poor match — not recommended`;
+                    return `<span class="no-match" title="${tip}">–</span>`;
+                }
+                const baseClass = best.display.startsWith('#') ? 'drill-number' : 'drill-letter';
+                const tip = tooltip(best);
+                return `<span class="${baseClass}" style="color:${best.color}" title="${tip}">${best.display}</span>`;
+            }
+            return `<span class="no-match" title="No letter/number drill within ±0.08 mm">–</span>`;
+        }
+
+        return '';
+    }
+
+    function updateTables(pct) {
+        const threadPct = pct / 100;
+
+        // Update UNC table
+        const uncBody = document.querySelector('#unc-table tbody');
+        uncBody.innerHTML = '';
+        for (const [name, major, tpi] of UNC_THREADS) {
+            const drillInch = calcTapDrillInch(major, tpi, threadPct);
+            const drillMm = drillInch * 25.4;
+            const drills = findDrillSizes(drillMm, 0.08);
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="thread-size">${name}-${tpi}</td>
+                <td>${formatDrillCell(drills, 'metric')}</td>
+                <td>${formatDrillCell(drills, 'inch')}</td>
+                <td>${formatDrillCell(drills, 'frac')}</td>
+                <td>${formatDrillCell(drills, 'letter')}</td>
+            `;
+            uncBody.appendChild(row);
+        }
+
+        // Update UNF table
+        const unfBody = document.querySelector('#unf-table tbody');
+        unfBody.innerHTML = '';
+        for (const [name, major, tpi] of UNF_THREADS) {
+            const drillInch = calcTapDrillInch(major, tpi, threadPct);
+            const drillMm = drillInch * 25.4;
+            const drills = findDrillSizes(drillMm, 0.08);
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="thread-size">${name}-${tpi}</td>
+                <td>${formatDrillCell(drills, 'metric')}</td>
+                <td>${formatDrillCell(drills, 'inch')}</td>
+                <td>${formatDrillCell(drills, 'frac')}</td>
+                <td>${formatDrillCell(drills, 'letter')}</td>
+            `;
+            unfBody.appendChild(row);
+        }
+
+        // Update Metric table
+        const metricBody = document.querySelector('#metric-table tbody');
+        metricBody.innerHTML = '';
+        for (const [major, pitch] of METRIC_COARSE) {
+            const drillMm = calcTapDrillMm(major, pitch, threadPct);
+            const drills = findDrillSizes(drillMm, 0.08);
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="thread-size">M${major}×${pitch}</td>
+                <td>${formatDrillCell(drills, 'metric')}</td>
+                <td>${formatDrillCell(drills, 'inch')}</td>
+                <td>${formatDrillCell(drills, 'frac')}</td>
+                <td>${formatDrillCell(drills, 'letter')}</td>
+            `;
+            metricBody.appendChild(row);
+        }
+    }
+
+    // Forward declaration for custom result updater
+    let updateCustomResult = function() {};
+
+    function updateAll(pct) {
+        pctValue.textContent = pct;
+        updateWarning(pct);
+        updateTables(pct);
+        updateCustomResult();
+
+        // Update preset button states
+        presetBtns.forEach(btn => {
+            if (parseInt(btn.dataset.pct) === pct) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+
+        // Set data attribute for print stylesheet
+        document.querySelector('.controls').dataset.pct = pct;
+    }
+
+    // Event listeners
+    slider.addEventListener('input', (e) => {
+        updateAll(parseInt(e.target.value));
+    });
+
+    presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const pct = parseInt(btn.dataset.pct);
+            slider.value = pct;
+            updateAll(pct);
+        });
+    });
+
+    // ==========================================================================
+    // CUSTOM THREAD CALCULATOR
+    // ==========================================================================
+
+    const customTypeRadios = document.querySelectorAll('input[name="custom-type"]');
+    const customMajor = document.getElementById('custom-major');
+    const customPitch = document.getElementById('custom-pitch');
+    const customResult = document.getElementById('custom-result');
+    const majorUnit = document.getElementById('major-unit');
+    const pitchUnit = document.getElementById('pitch-unit');
+
+    function getCustomType() {
+        return document.querySelector('input[name="custom-type"]:checked').value;
+    }
+
+    updateCustomResult = function() {
+        const major = parseFloat(customMajor.value);
+        const pitch = parseFloat(customPitch.value);
+        const pct = parseInt(slider.value) / 100;
+
+        // Hide result if inputs are invalid/empty
+        if (isNaN(major) || isNaN(pitch) || major <= 0 || pitch <= 0) {
+            customResult.classList.remove('visible');
+            return;
+        }
+
+        let drillMm, threadName;
+        if (getCustomType() === 'metric') {
+            drillMm = calcTapDrillMm(major, pitch, pct);
+            threadName = `M${major}×${pitch}`;
+        } else {
+            // Inch: major is in inches, pitch is TPI
+            const drillInch = calcTapDrillInch(major, pitch, pct);
+            drillMm = drillInch * 25.4;
+            threadName = `${major}"-${pitch} TPI`;
+        }
+
+        const drills = findDrillSizes(drillMm, 0.08);
+        const drillInch = drillMm / 25.4;
+
+        let html = `<div class="result-row"><span class="result-label">Thread:</span><strong>${threadName} @ ${slider.value}%</strong></div>`;
+        html += `<div class="result-row"><span class="result-label">Tap Drill:</span><span>${drillMm.toFixed(3)} mm / ${drillInch.toFixed(4)}"</span></div>`;
+
+        // Metric
+        html += `<div class="result-row"><span class="result-label">Metric:</span>${formatDrillCell(drills, 'metric')}</div>`;
+
+        // Decimal
+        html += `<div class="result-row"><span class="result-label">Decimal:</span>${formatDrillCell(drills, 'inch')}</div>`;
+
+        // Fractional
+        html += `<div class="result-row"><span class="result-label">Fractional:</span>${formatDrillCell(drills, 'frac')}</div>`;
+
+        // Letter/Number
+        html += `<div class="result-row"><span class="result-label">Letter/#:</span>${formatDrillCell(drills, 'letter')}</div>`;
+
+        customResult.innerHTML = html;
+        customResult.classList.add('visible');
+    };
+
+    // Update unit labels when type changes
+    customTypeRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (getCustomType() === 'metric') {
+                majorUnit.textContent = 'mm';
+                pitchUnit.textContent = 'mm';
+                customMajor.placeholder = 'e.g. 20';
+                customPitch.placeholder = 'e.g. 1.5';
+            } else {
+                majorUnit.textContent = 'in';
+                pitchUnit.textContent = 'TPI';
+                customMajor.placeholder = 'e.g. 0.5';
+                customPitch.placeholder = 'e.g. 13';
+            }
+            updateCustomResult();
+        });
+    });
+
+    // Auto-calculate on input changes
+    customMajor.addEventListener('input', updateCustomResult);
+    customPitch.addEventListener('input', updateCustomResult);
+
+    // Initial render (after all setup is complete)
+    // Explicitly set slider value to override browser form restoration
+    slider.value = 65;
+    updateAll(65);
+    </script>
+</body>
+</html>
