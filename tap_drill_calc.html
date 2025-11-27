@@ -229,6 +229,34 @@
             cursor: help;
         }
 
+        /* Material preset buttons */
+        .preset-btns {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .preset-btn {
+            padding: 0.25rem 0.6rem;
+            border: 1px solid var(--accent);
+            background: transparent;
+            color: var(--text-dim);
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.15s;
+        }
+
+        .preset-btn:hover {
+            background: var(--accent);
+            color: var(--text);
+        }
+
+        .preset-btn.active {
+            background: var(--highlight);
+            border-color: var(--highlight);
+            color: var(--text);
+        }
+
         @media (max-width: 700px) {
             .control-panel {
                 flex-direction: column;
@@ -686,6 +714,16 @@
                 <input type="range" id="pct-slider" min="40" max="85" value="65" step="1">
             </div>
 
+            <!-- Material presets -->
+            <div class="option-row">
+                <span class="option-label"></span>
+                <div class="preset-btns">
+                    <button class="preset-btn" data-pct="50" title="50% — Austenitic stainless is difficult to tap due to work hardening. Lower engagement reduces torque and tap breakage. (MH p.2018)">Stainless</button>
+                    <button class="preset-btn active" data-pct="65" title="65% — Above the 60% strength plateau with a small safety margin. Good balance of strength and tapping ease. (MH p.2020)">Steel</button>
+                    <button class="preset-btn" data-pct="75" title="75% — Soft materials permit higher engagement. Commonly used for extra measure of safety. (MH p.2020)">Aluminum</button>
+                </div>
+            </div>
+
             <!-- Oversize toggle -->
             <div class="option-row">
                 <span class="option-label">Oversize:</span>
@@ -845,6 +883,22 @@
             torque required and the possibility of broken taps."</li>
             <li>(p.2018, Stainless): "Austenitic stainless steels are very difficult to tap because of
             their high resistance to cutting and their great tendency to work harden."</li>
+        </ul>
+        <br>
+
+        <strong>Material Preset Sources</strong>
+        <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
+            <li><strong>Stainless (50%)</strong> — "Austenitic stainless steels are very difficult to tap
+            because of their high resistance to cutting and their great tendency to work harden."
+            (MH p.2018). Lower thread engagement reduces tapping torque and tap breakage risk in these
+            demanding materials.</li>
+            <li><strong>Steel (65%)</strong> — 60% is where strength plateaus (MH p.2020), but 65% adds
+            a small safety margin while remaining well below the high-torque zone. A practical default
+            for general steelwork.</li>
+            <li><strong>Aluminum (75%)</strong> — "75 per cent threads are commonly used to provide an
+            extra measure of safety." (MH p.2020). Soft materials like aluminum have little resistance to
+            cutting, so higher engagement is easily achieved and provides extra holding strength in the
+            weaker material.</li>
         </ul>
     </div>
 
@@ -1603,12 +1657,36 @@
 
     // Event listeners
     slider.addEventListener('input', (e) => {
-        updateAll(parseInt(e.target.value));
+        const pct = parseInt(e.target.value);
+        updateAll(pct);
+        updatePresetButtons(pct);
     });
 
     // Oversize toggle listener
     oversizeToggle.addEventListener('change', () => {
         updateAll(parseInt(slider.value));
+    });
+
+    // Preset button listeners
+    const presetBtns = document.querySelectorAll('.preset-btn');
+
+    function updatePresetButtons(pct) {
+        presetBtns.forEach(btn => {
+            if (parseInt(btn.dataset.pct) === pct) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+
+    presetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const pct = parseInt(btn.dataset.pct);
+            slider.value = pct;
+            updateAll(pct);
+            updatePresetButtons(pct);
+        });
     });
 
     // ==========================================================================
