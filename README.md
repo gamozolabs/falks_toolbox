@@ -17,11 +17,13 @@ A collection of single-file, offline-first tools for machinists and makers.
 Interactive calculator for determining tap drill sizes based on thread engagement percentage. Features:
 
 - UNC, UNF, and Metric Coarse thread tables
-- Adjustable thread engagement (40-85%)
+- Adjustable thread engagement (40-85%) with color-coded recommendations
+- Drill oversize compensation using data from Machinery's Handbook p.897
 - Drill size lookup: Metric, Decimal, Fractional, Letter, and Number drills
-- Custom thread calculator for non-standard sizes (e.g., M20×1.5)
+- Unified control panel with real-time "nutrition facts" style results
+- Click any table row to populate the calculator for detailed info
 - Color-coded quality indicators (how close each drill is to ideal)
-- Formulas and references from Machinery's Handbook
+- Formulas from Machinery's Handbook using correct 1.08253 constant for Unified/ISO threads
 
 ## Usage
 

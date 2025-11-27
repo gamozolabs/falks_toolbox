@@ -52,131 +52,191 @@
             opacity: 0.8;
         }
 
-        .controls {
+        /* Unified control panel - options left, results right */
+        .control-panel {
             background: var(--bg-light);
             padding: 1.5rem;
             border-radius: 8px;
             margin-bottom: 1.5rem;
-            max-width: 800px;
+            max-width: 1000px;
             margin-left: auto;
             margin-right: auto;
-        }
-
-        .slider-container {
-            margin-bottom: 1rem;
-        }
-
-        .slider-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
+            gap: 1.5rem;
+            align-items: flex-start;
         }
 
-        .slider-value {
-            font-size: 2rem;
+        .control-options {
+            flex: 0 0 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .control-results {
+            flex: 1 1 300px;
+            min-width: 250px;
+        }
+
+        .option-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .option-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            width: 75px;
+            flex-shrink: 0;
+        }
+
+        .option-value {
+            font-size: 1.1rem;
             font-weight: bold;
             color: var(--highlight);
             font-family: monospace;
+            min-width: 45px;
         }
 
-        .slider-wrapper {
-            position: relative;
-            height: 40px;
-        }
-
-        input[type="range"] {
+        .option-row input[type="range"] {
             -webkit-appearance: none;
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
             background: var(--accent);
             outline: none;
-            margin-top: 16px;
         }
 
-        input[type="range"]::-webkit-slider-thumb {
+        .option-row input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             background: var(--highlight);
             cursor: pointer;
-            border: 3px solid var(--text);
+            border: 2px solid var(--text);
         }
 
-        input[type="range"]::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
+        .option-row input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
             border-radius: 50%;
             background: var(--highlight);
             cursor: pointer;
-            border: 3px solid var(--text);
+            border: 2px solid var(--text);
         }
 
-        .slider-marks {
+        .option-row input[type="number"] {
+            padding: 0.35rem 0.5rem;
+            border: 1px solid var(--accent);
+            border-radius: 4px;
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+            width: 75px;
+        }
+
+        .option-row input[type="number"]:focus {
+            outline: none;
+            border-color: var(--highlight);
+        }
+
+        .option-row .input-unit {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            width: 28px;
+        }
+
+        .option-row input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--highlight);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: pointer;
+            color: var(--text);
+            font-size: 0.85rem;
+        }
+
+        .radio-group input[type="radio"] {
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .toggle-info {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: var(--text-dim);
+            font-size: 0.7rem;
+            cursor: help;
+        }
+
+        .toggle-info:hover {
+            background: var(--highlight);
+            color: var(--text);
+        }
+
+        #custom-result {
+            padding: 0.75rem;
+            background: var(--bg);
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        #custom-result .result-row {
             display: flex;
             justify-content: space-between;
-            margin-top: 4px;
-            font-size: 0.75rem;
+            align-items: center;
+            min-height: 1.6rem;
+            padding: 0.15rem 0;
+            border-bottom: 1px solid var(--accent);
+            font-size: 0.85rem;
+        }
+
+        #custom-result .result-row:last-child {
+            border-bottom: none;
+        }
+
+        #custom-result .result-label {
             color: var(--text-dim);
         }
 
-        .presets {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-top: 1rem;
-        }
-
-        .preset-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--accent);
-            background: transparent;
+        #custom-result .result-row strong {
             color: var(--text);
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s;
         }
 
-        .preset-btn:hover {
-            background: var(--accent);
-            border-color: var(--highlight);
+        /* Thread % label with tooltip */
+        .pct-label {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            cursor: help;
         }
 
-        .preset-btn.active {
-            background: var(--highlight);
-            border-color: var(--highlight);
-        }
-
-        #warning-container {
-            min-height: 52px;
-            margin-top: 1rem;
-        }
-
-        .warning-box {
-            padding: 0.75rem 1rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-        }
-
-        .warning-box.danger {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid var(--danger);
-            color: #fca5a5;
-        }
-
-        .warning-box.warning {
-            background: rgba(251, 191, 36, 0.2);
-            border: 1px solid var(--warning);
-            color: #fde68a;
-        }
-
-        .warning-box.success {
-            background: rgba(74, 222, 128, 0.2);
-            border: 1px solid var(--success);
-            color: #bbf7d0;
+        @media (max-width: 700px) {
+            .control-panel {
+                flex-direction: column;
+            }
+            .control-options {
+                width: 100%;
+                min-width: unset;
+            }
         }
 
         .tables-container {
@@ -225,6 +285,13 @@
             top: 0;
         }
 
+        /* Fixed column widths to prevent layout shift when headers change */
+        .col-mm, .col-in {
+            width: 6.5rem;
+            min-width: 6.5rem;
+            white-space: nowrap;
+        }
+
         td {
             padding: 0.5rem;
             border-bottom: 1px solid var(--accent);
@@ -232,6 +299,19 @@
 
         tr:hover {
             background: rgba(233, 69, 96, 0.1);
+        }
+
+        tbody tr {
+            cursor: pointer;
+        }
+
+        tbody tr.selected {
+            background: rgba(233, 69, 96, 0.25);
+            outline: 1px solid var(--highlight);
+        }
+
+        tbody tr.selected:hover {
+            background: rgba(233, 69, 96, 0.3);
         }
 
         .drill-metric {
@@ -298,129 +378,6 @@
             color: var(--text-dim);
         }
 
-        .custom-thread-section {
-            max-width: 800px;
-            margin: 0 auto 1.5rem auto;
-            padding: 1rem;
-            background: var(--bg-light);
-            border-radius: 8px;
-        }
-
-        .custom-thread-section > strong {
-            display: block;
-            margin-bottom: 0.75rem;
-            color: var(--highlight);
-        }
-
-        .custom-layout {
-            display: flex;
-            gap: 2rem;
-            align-items: flex-start;
-        }
-
-        .custom-inputs {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            min-width: 200px;
-        }
-
-        .radio-group {
-            display: flex;
-            gap: 1.5rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .radio-group label {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            cursor: pointer;
-            color: var(--text);
-            font-size: 0.9rem;
-        }
-
-        .radio-group input[type="radio"] {
-            cursor: pointer;
-            margin: 0;
-        }
-
-        .input-row {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .input-row label {
-            font-size: 0.85rem;
-            color: var(--text-dim);
-            width: 65px;
-        }
-
-        .input-row input {
-            padding: 0.4rem 0.5rem;
-            border: 1px solid var(--accent);
-            border-radius: 4px;
-            background: var(--bg);
-            color: var(--text);
-            font-size: 0.9rem;
-            width: 90px;
-        }
-
-        .input-row input:focus {
-            outline: none;
-            border-color: var(--highlight);
-        }
-
-        .input-unit {
-            color: var(--text-dim);
-            font-size: 0.8rem;
-            width: 30px;
-        }
-
-        #custom-result {
-            flex: 1;
-            padding: 0.75rem;
-            background: var(--bg);
-            border-radius: 4px;
-            font-family: monospace;
-            display: none;
-        }
-
-        #custom-result.visible {
-            display: block;
-        }
-
-        #custom-result .result-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            min-height: 1.75rem;
-            padding: 0.2rem 0;
-            border-bottom: 1px solid var(--accent);
-            font-size: 0.9rem;
-        }
-
-        #custom-result .result-row:last-child {
-            border-bottom: none;
-        }
-
-        #custom-result .result-label {
-            color: var(--text-dim);
-        }
-
-        #custom-result .result-row strong {
-            color: var(--text);
-        }
-
-        @media (max-width: 500px) {
-            .custom-layout {
-                flex-direction: column;
-            }
-            #custom-result {
-                width: 100%;
-            }
-        }
 
         .thread-size {
             font-weight: bold;
@@ -468,21 +425,12 @@
                 font-size: 0.7rem;
             }
 
-            .controls {
+            .control-panel {
                 padding: 1rem;
             }
 
-            .slider-value {
-                font-size: 1.5rem;
-            }
-
-            .presets {
-                justify-content: center;
-            }
-
-            .preset-btn {
-                padding: 0.4rem 0.7rem;
-                font-size: 0.75rem;
+            .option-value {
+                font-size: 1rem;
             }
 
             .table-section {
@@ -507,7 +455,6 @@
                 font-size: 0.65rem;
             }
 
-            .custom-thread-section,
             .formula-info,
             .legend-section {
                 padding: 0.75rem;
@@ -515,22 +462,21 @@
             }
 
             .radio-group {
-                gap: 1rem;
+                gap: 0.75rem;
             }
 
             .radio-group label {
                 font-size: 0.8rem;
             }
 
-            .input-row label {
-                width: 55px;
-                font-size: 0.75rem;
+            .option-label {
+                width: 60px;
+                font-size: 0.8rem;
             }
 
-            .input-row input {
-                width: 70px;
+            .option-row input[type="number"] {
+                width: 65px;
                 font-size: 0.8rem;
-                padding: 0.3rem;
             }
 
             #custom-result {
@@ -549,18 +495,15 @@
             .gradient-labels {
                 font-size: 0.65rem;
             }
+
+            .toggle-info {
+                width: 14px;
+                height: 14px;
+                font-size: 0.65rem;
+            }
         }
 
         @media (max-width: 400px) {
-            .presets {
-                gap: 0.3rem;
-            }
-
-            .preset-btn {
-                padding: 0.3rem 0.5rem;
-                font-size: 0.7rem;
-            }
-
             .radio-group {
                 flex-direction: column;
                 gap: 0.5rem;
@@ -602,28 +545,22 @@
                 display: none;
             }
 
-            .controls {
+            .control-panel {
                 background: none;
                 padding: 0.5rem 0;
                 border-bottom: 1px solid #ccc;
                 margin-bottom: 0.5rem;
             }
 
-            .slider-container,
-            .presets,
-            #warning-container {
+            .control-options {
                 display: none;
             }
 
             /* Show current percentage as text for print */
-            .controls::after {
+            .control-panel::after {
                 content: "Thread Engagement: " attr(data-pct) "%";
                 font-size: 14pt;
                 font-weight: bold;
-            }
-
-            .custom-thread-section {
-                display: none;
             }
 
             .tables-container {
@@ -717,59 +654,50 @@
     <p class="subtitle">Interactive thread percentage calculator with drill size lookup</p>
     <p class="standalone-note">This is a standalone HTML file with zero dependencies. Save this page (Ctrl+S) to use offline — no internet required. Part of <a href="https://github.com/gamozolabs/falks_toolbox" style="color: var(--success);">Falk's Toolbox</a>.</p>
 
-    <div class="controls">
-        <div class="slider-container">
-            <div class="slider-header">
-                <span>Thread Engagement</span>
-                <span class="slider-value"><span id="pct-value">65</span>%</span>
+    <div class="control-panel">
+        <div class="control-options">
+            <!-- Thread type -->
+            <div class="option-row">
+                <span class="option-label">Thread:</span>
+                <div class="radio-group">
+                    <label><input type="radio" name="custom-type" value="metric" checked> Metric</label>
+                    <label><input type="radio" name="custom-type" value="inch"> Inch</label>
+                </div>
             </div>
-            <div class="slider-wrapper">
+
+            <!-- Major diameter -->
+            <div class="option-row">
+                <span class="option-label">Major Ø:</span>
+                <input type="number" id="custom-major" step="0.01" placeholder="20" value="20">
+                <span class="input-unit" id="major-unit">mm</span>
+            </div>
+
+            <!-- Pitch -->
+            <div class="option-row">
+                <span class="option-label">Pitch:</span>
+                <input type="number" id="custom-pitch" step="0.01" placeholder="1.5" value="1.5">
+                <span class="input-unit" id="pitch-unit">mm</span>
+            </div>
+
+            <!-- Thread % slider -->
+            <div class="option-row">
+                <span class="option-label pct-label" id="pct-label" title="">Thread %:</span>
+                <span class="option-value" id="pct-value">65%</span>
                 <input type="range" id="pct-slider" min="40" max="85" value="65" step="1">
             </div>
-            <div class="slider-marks">
-                <span>40%</span>
-                <span>55%</span>
-                <span>70%</span>
-                <span>85%</span>
+
+            <!-- Oversize toggle -->
+            <div class="option-row">
+                <span class="option-label">Oversize:</span>
+                <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+                    <input type="checkbox" id="oversize-toggle">
+                    <span style="font-size: 0.85rem; color: var(--text);">Compensate</span>
+                </label>
+                <span class="toggle-info" title="Drills cut oversize holes. When enabled, recommends a smaller drill to achieve the target hole size. Data from Machinery's Handbook p.897.">?</span>
             </div>
         </div>
 
-        <div class="presets">
-            <button class="preset-btn" data-pct="50">50% Stainless/Ti</button>
-            <button class="preset-btn" data-pct="55">55% Hard Alloys</button>
-            <button class="preset-btn" data-pct="60">60% Production</button>
-            <button class="preset-btn active" data-pct="65">65% General</button>
-            <button class="preset-btn" data-pct="75">75% Standard</button>
-        </div>
-
-        <div id="warning-container"></div>
-    </div>
-
-    <div class="custom-thread-section">
-        <strong>Custom Thread Calculator</strong>
-        <div class="custom-layout">
-            <div class="custom-inputs">
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" name="custom-type" value="metric" checked>
-                        Metric (mm)
-                    </label>
-                    <label>
-                        <input type="radio" name="custom-type" value="inch">
-                        Inch (TPI)
-                    </label>
-                </div>
-                <div class="input-row">
-                    <label for="custom-major">Major Ø:</label>
-                    <input type="number" id="custom-major" step="0.01" placeholder="e.g. 20" value="20">
-                    <span class="input-unit" id="major-unit">mm</span>
-                </div>
-                <div class="input-row">
-                    <label for="custom-pitch">Pitch:</label>
-                    <input type="number" id="custom-pitch" step="0.01" placeholder="e.g. 1.5" value="1.5">
-                    <span class="input-unit" id="pitch-unit">mm</span>
-                </div>
-            </div>
+        <div class="control-results">
             <div id="custom-result"></div>
         </div>
     </div>
@@ -785,10 +713,10 @@
                     <thead>
                         <tr>
                             <th>Thread</th>
-                            <th>Metric</th>
-                            <th>Decimal</th>
-                            <th>Frac</th>
-                            <th>Letter/#</th>
+                            <th class="col-mm" title="Recommended drill size in mm">Drill (mm)</th>
+                            <th class="col-in" title="Recommended drill size in inches">Drill (in)</th>
+                            <th title="Nearest fractional drill size">Frac</th>
+                            <th title="Nearest letter or number drill">Letter/#</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -806,10 +734,10 @@
                     <thead>
                         <tr>
                             <th>Thread</th>
-                            <th>Metric</th>
-                            <th>Decimal</th>
-                            <th>Frac</th>
-                            <th>Letter/#</th>
+                            <th class="col-mm" title="Recommended drill size in mm">Drill (mm)</th>
+                            <th class="col-in" title="Recommended drill size in inches">Drill (in)</th>
+                            <th title="Nearest fractional drill size">Frac</th>
+                            <th title="Nearest letter or number drill">Letter/#</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -827,44 +755,16 @@
                     <thead>
                         <tr>
                             <th>Thread</th>
-                            <th>Metric</th>
-                            <th>Decimal</th>
-                            <th>Frac</th>
-                            <th>Letter/#</th>
+                            <th class="col-mm" title="Recommended drill size in mm">Drill (mm)</th>
+                            <th class="col-in" title="Recommended drill size in inches">Drill (in)</th>
+                            <th title="Nearest fractional drill size">Frac</th>
+                            <th title="Nearest letter or number drill">Letter/#</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
             </div>
         </div>
-    </div>
-
-    <div class="formula-info">
-        <strong>Formulas</strong> (Machinery's Handbook 29th Ed, p.2030):<br>
-        Unified: <code>Hole = Major − (1.08253 × %Thread / TPI)</code><br>
-        Metric: <code>Hole = Major − (1.08253 × Pitch × %Thread)</code><br><br>
-
-        <strong>Drill Matching:</strong>
-        Letter (A-Z) and Number (#1-#80) drills shown when within ±0.08 mm (±3 thou).
-        Fractional drills (1/64") always shown — see color legend below.
-        Hover over any drill size for exact dimensions and deviations.<br><br>
-
-        <strong>Sources &amp; References:</strong>
-        <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
-            <li><em>Machinery's Handbook</em> 29th Ed, p.2020: "Tests have shown that any increase
-            in the percentage of full thread over 60 per cent does not significantly increase the
-            strength of the thread."</li>
-            <li><em>Machinery's Handbook</em> 29th Ed, p.2020: "Often, a 55 to 60 per cent thread
-            is satisfactory, although 75 per cent threads are commonly used to provide an extra
-            measure of safety."</li>
-            <li><em>Machinery's Handbook</em> 29th Ed, p.2020: "The tap drill should not be smaller
-            than is necessary to give the required strength to the thread as even a very small
-            decrease in the diameter of the drill will increase the torque required and the
-            possibility of broken taps."</li>
-            <li><em>Machinery's Handbook</em> 29th Ed, p.2018 (Stainless): "Austenitic stainless
-            steels are very difficult to tap because of their high resistance to cutting and their
-            great tendency to work harden."</li>
-        </ul>
     </div>
 
     <div class="legend-section">
@@ -887,6 +787,67 @@
         </p>
     </div>
 
+    <div class="formula-info">
+        <strong>Understanding Hole Size vs Drill Size</strong><br>
+        Thread percentage is determined by the <em>hole diameter</em>, not the drill size. Since drills
+        cut oversize, using a drill equal to the target hole produces a larger hole and lower thread %.
+        <br><br>
+
+        <strong>Column Definitions:</strong>
+        <ul style="margin: 0.5rem 0 0.75rem 1.5rem; padding: 0;">
+            <li><strong>Hole Ø</strong> — Target hole diameter for your selected thread %. This is the
+            minor diameter that determines actual thread engagement.</li>
+            <li><strong>Drill</strong> — Recommended drill size. When oversize adjustment is enabled,
+            this is smaller than the target hole to account for expected oversize.</li>
+            <li><strong>Frac / Letter/#</strong> — Nearest standard drill sizes to the recommended drill.</li>
+        </ul>
+
+        <strong>Drill Oversize Data</strong> (Machinery's Handbook 29th Ed, p.897):<br>
+        Based on US Cutting Tool Institute tests of 2800+ holes in steel and cast iron:
+        <table style="margin: 0.5rem 0; font-size: 0.8rem; border-collapse: collapse;">
+            <tr style="background: var(--bg);">
+                <th style="padding: 0.25rem 0.5rem; text-align: left;">Drill Ø</th>
+                <th style="padding: 0.25rem 0.5rem;">Avg Max</th>
+                <th style="padding: 0.25rem 0.5rem;">Mean</th>
+                <th style="padding: 0.25rem 0.5rem;">Avg Min</th>
+            </tr>
+            <tr><td style="padding: 0.2rem 0.5rem;">1/16"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.002"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.0015"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.001"</td></tr>
+            <tr><td style="padding: 0.2rem 0.5rem;">1/8"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.0045"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.003"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.001"</td></tr>
+            <tr><td style="padding: 0.2rem 0.5rem;">1/4"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.0065"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.004"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.0025"</td></tr>
+            <tr><td style="padding: 0.2rem 0.5rem;">1/2"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.008"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.005"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.003"</td></tr>
+            <tr><td style="padding: 0.2rem 0.5rem;">3/4"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.008"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.005"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.003"</td></tr>
+            <tr><td style="padding: 0.2rem 0.5rem;">1"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.009"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.007"</td><td style="padding: 0.2rem 0.5rem; text-align: center;">+0.004"</td></tr>
+        </table>
+        <span style="font-size: 0.75rem; color: var(--text-dim);">
+            "When the drill point is accurately ground and the other machining conditions are correct,
+            the resulting hole size is more likely to be between the mean and average minimum values."
+            This calculator uses the <strong>mean</strong> value and interpolates for any drill size.
+        </span>
+        <br><br>
+
+        <strong>Thread % Formulas</strong> (Machinery's Handbook 29th Ed, p.2030):<br>
+        Unified: <code>Hole = Major − (1.08253 × %Thread / TPI)</code><br>
+        Metric: <code>Hole = Major − (1.08253 × Pitch × %Thread)</code><br><br>
+
+        <strong>Drill Matching:</strong>
+        Letter (A-Z) and Number (#1-#80) drills shown when within ±0.08 mm (±3 thou).
+        Fractional drills (1/64") always shown — see color legend above.
+        Hover over any drill size for exact dimensions and deviations.<br><br>
+
+        <strong>Thread % Guidelines</strong> (Machinery's Handbook 29th Ed, p.2020):
+        <ul style="margin: 0.5rem 0 0 1.5rem; padding: 0;">
+            <li>"Tests have shown that any increase in the percentage of full thread over <strong>60 per cent
+            does not significantly increase the strength</strong> of the thread."</li>
+            <li>"Often, a 55 to 60 per cent thread is satisfactory, although 75 per cent threads are
+            commonly used to provide an extra measure of safety."</li>
+            <li>"The tap drill should not be smaller than is necessary to give the required strength to
+            the thread as even a very small decrease in the diameter of the drill will increase the
+            torque required and the possibility of broken taps."</li>
+            <li>(p.2018, Stainless): "Austenitic stainless steels are very difficult to tap because of
+            their high resistance to cutting and their great tendency to work harden."</li>
+        </ul>
+    </div>
+
     <script>
     // ==========================================================================
     // CONSTANTS AND DATA
@@ -894,6 +855,92 @@
 
     // Tap drill factor: 2 × 5H/8 where H = √3/2 × P (from Machinery's Handbook)
     const TAP_DRILL_FACTOR = 1.0825317547305483;
+
+    // Drill oversize data from Machinery's Handbook 29th Ed, p.897
+    // "Oversize Diameters in Drilling" - US Cutting Tool Institute test data
+    // Format: [drill_diameter_inch, avg_max_oversize, mean_oversize, avg_min_oversize]
+    // Note: "when the drill point is accurately ground and the other machining
+    // conditions are correct, the resulting hole size is more likely to be
+    // between the mean and average minimum values"
+    const DRILL_OVERSIZE_DATA = [
+        [0.0625,  0.002,  0.0015, 0.001 ],  // 1/16"
+        [0.125,   0.0045, 0.003,  0.001 ],  // 1/8"
+        [0.25,    0.0065, 0.004,  0.0025],  // 1/4"
+        [0.5,     0.008,  0.005,  0.003 ],  // 1/2"
+        [0.75,    0.008,  0.005,  0.003 ],  // 3/4"
+        [1.0,     0.009,  0.007,  0.004 ],  // 1"
+    ];
+
+    /**
+     * Get expected drill oversize for a given drill diameter using linear interpolation.
+     * Returns object with avgMax, mean, avgMin oversize values in inches.
+     * For sizes outside the table range, extrapolates from nearest two points.
+     *
+     * @param {number} drillDiaInch - Drill diameter in inches
+     * @returns {Object} - {avgMax, mean, avgMin} oversize in inches
+     */
+    function getDrillOversize(drillDiaInch) {
+        const data = DRILL_OVERSIZE_DATA;
+
+        // Handle edge cases: clamp to table range for extrapolation
+        if (drillDiaInch <= data[0][0]) {
+            // Below smallest - use smallest values (don't extrapolate to zero)
+            return {
+                avgMax: data[0][1],
+                mean: data[0][2],
+                avgMin: data[0][3]
+            };
+        }
+        if (drillDiaInch >= data[data.length - 1][0]) {
+            // Above largest - use largest values
+            return {
+                avgMax: data[data.length - 1][1],
+                mean: data[data.length - 1][2],
+                avgMin: data[data.length - 1][3]
+            };
+        }
+
+        // Find bracketing points for interpolation
+        let lower = data[0];
+        let upper = data[1];
+        for (let i = 0; i < data.length - 1; i++) {
+            if (drillDiaInch >= data[i][0] && drillDiaInch <= data[i + 1][0]) {
+                lower = data[i];
+                upper = data[i + 1];
+                break;
+            }
+        }
+
+        // Linear interpolation
+        const t = (drillDiaInch - lower[0]) / (upper[0] - lower[0]);
+        return {
+            avgMax: lower[1] + t * (upper[1] - lower[1]),
+            mean: lower[2] + t * (upper[2] - lower[2]),
+            avgMin: lower[3] + t * (upper[3] - lower[3])
+        };
+    }
+
+    /**
+     * Get the recommended drill size to achieve a target hole size,
+     * accounting for expected drill oversize.
+     * Uses the "mean" oversize as the expected value for a well-ground drill.
+     *
+     * @param {number} targetHoleInch - Desired hole diameter in inches
+     * @returns {number} - Recommended drill diameter in inches
+     */
+    function getDrillForTargetHole(targetHoleInch) {
+        // Iterative approach since oversize depends on drill size
+        // Start with target as initial guess
+        let drillSize = targetHoleInch;
+
+        // A few iterations converge quickly
+        for (let i = 0; i < 5; i++) {
+            const oversize = getDrillOversize(drillSize);
+            drillSize = targetHoleInch - oversize.mean;
+        }
+
+        return Math.max(0.001, drillSize); // Don't go negative
+    }
 
     // UNC Threads: [name, major_dia_inch, tpi]
     const UNC_THREADS = [
@@ -1248,33 +1295,37 @@
 
     const slider = document.getElementById('pct-slider');
     const pctValue = document.getElementById('pct-value');
-    const warningContainer = document.getElementById('warning-container');
-    const presetBtns = document.querySelectorAll('.preset-btn');
+    const pctLabel = document.getElementById('pct-label');
+    const oversizeToggle = document.getElementById('oversize-toggle');
 
-    function updateWarning(pct) {
-        let cls, icon, msg;
+    function isOversizeEnabled() {
+        return oversizeToggle.checked;
+    }
+
+    /**
+     * Update thread % display: color and tooltip based on value
+     */
+    function updatePctDisplay(pct) {
+        let color, msg;
         if (pct >= 75) {
-            cls = 'danger';
-            icon = '⚠️';
+            color = 'var(--danger)';
             msg = 'High tap breakage risk. No strength benefit over 60% (MH p.2020).';
         } else if (pct >= 65) {
-            cls = 'warning';
-            icon = '⚡';
+            color = 'var(--warning)';
             msg = 'Above 60% threshold — diminishing returns, higher torque required.';
         } else if (pct >= 55) {
-            cls = 'success';
-            icon = '✓';
+            color = 'var(--success)';
             msg = 'Recommended range. Good balance of strength and tapping torque.';
         } else if (pct >= 50) {
-            cls = 'success';
-            icon = '✓';
+            color = 'var(--success)';
             msg = 'Light engagement. Good for stainless and difficult materials.';
         } else {
-            cls = 'warning';
-            icon = '⚡';
+            color = 'var(--warning)';
             msg = 'Very light engagement. Verify adequate for load requirements.';
         }
-        warningContainer.innerHTML = `<div class="warning-box ${cls}"><strong>${icon} ${pct}%:</strong> ${msg}</div>`;
+        pctValue.textContent = pct + '%';
+        pctValue.style.color = color;
+        pctLabel.title = msg;
     }
 
     function formatDrillCell(drills, type) {
@@ -1332,25 +1383,86 @@
         return '';
     }
 
+    /**
+     * Format size cell in mm
+     */
+    function formatMmCell(sizeMm, sizeInch, useOversize) {
+        let tip;
+        if (useOversize) {
+            const oversize = getDrillOversize(sizeInch);
+            const expectedHole = sizeInch + oversize.mean;
+            tip = `Drill: ${sizeMm.toFixed(3)} mm = ${sizeInch.toFixed(4)}"&#10;` +
+                  `Expected oversize: +${(oversize.mean * 25.4).toFixed(3)} mm (+${(oversize.mean * 1000).toFixed(1)} thou)&#10;` +
+                  `Expected hole: ~${(expectedHole * 25.4).toFixed(3)} mm`;
+        } else {
+            tip = `Hole: ${sizeMm.toFixed(3)} mm = ${sizeInch.toFixed(4)}"`;
+        }
+        return `<span class="drill-metric" title="${tip}">${sizeMm.toFixed(2)}</span>`;
+    }
+
+    /**
+     * Format size cell in inches
+     */
+    function formatInchCell(sizeMm, sizeInch, useOversize) {
+        let tip;
+        if (useOversize) {
+            const oversize = getDrillOversize(sizeInch);
+            const expectedHole = sizeInch + oversize.mean;
+            tip = `Drill: ${sizeMm.toFixed(3)} mm = ${sizeInch.toFixed(4)}"&#10;` +
+                  `Expected oversize: +${(oversize.mean * 25.4).toFixed(3)} mm (+${(oversize.mean * 1000).toFixed(1)} thou)&#10;` +
+                  `Expected hole: ~${(expectedHole * 25.4).toFixed(3)} mm`;
+        } else {
+            tip = `Hole: ${sizeMm.toFixed(3)} mm = ${sizeInch.toFixed(4)}"`;
+        }
+        return `<span class="drill-inch" title="${tip}">${sizeInch.toFixed(4)}</span>`;
+    }
+
+    // Track currently selected row
+    let selectedRow = null;
+
+    function selectRow(row) {
+        // Deselect previous
+        if (selectedRow) {
+            selectedRow.classList.remove('selected');
+        }
+        // Select new
+        selectedRow = row;
+        if (row) {
+            row.classList.add('selected');
+        }
+    }
+
     function updateTables(pct) {
         const threadPct = pct / 100;
+        const useOversize = isOversizeEnabled();
+
+        // Clear selection when tables update
+        selectedRow = null;
 
         // Update UNC table
         const uncBody = document.querySelector('#unc-table tbody');
         uncBody.innerHTML = '';
         for (const [name, major, tpi] of UNC_THREADS) {
-            const drillInch = calcTapDrillInch(major, tpi, threadPct);
-            const drillMm = drillInch * 25.4;
-            const drills = findDrillSizes(drillMm, 0.08);
+            const targetHoleInch = calcTapDrillInch(major, tpi, threadPct);
+            const targetHoleMm = targetHoleInch * 25.4;
+
+            // Get size to display (drill if oversize enabled, hole if not)
+            const sizeInch = useOversize ? getDrillForTargetHole(targetHoleInch) : targetHoleInch;
+            const sizeMm = sizeInch * 25.4;
+            const drills = findDrillSizes(sizeMm, 0.08);
 
             const row = document.createElement('tr');
+            row.dataset.type = 'inch';
+            row.dataset.major = major;
+            row.dataset.pitch = tpi;
             row.innerHTML = `
                 <td class="thread-size">${name}-${tpi}</td>
-                <td>${formatDrillCell(drills, 'metric')}</td>
-                <td>${formatDrillCell(drills, 'inch')}</td>
+                <td>${formatMmCell(sizeMm, sizeInch, useOversize)}</td>
+                <td>${formatInchCell(sizeMm, sizeInch, useOversize)}</td>
                 <td>${formatDrillCell(drills, 'frac')}</td>
                 <td>${formatDrillCell(drills, 'letter')}</td>
             `;
+            row.addEventListener('click', () => handleRowClick(row));
             uncBody.appendChild(row);
         }
 
@@ -1358,18 +1470,25 @@
         const unfBody = document.querySelector('#unf-table tbody');
         unfBody.innerHTML = '';
         for (const [name, major, tpi] of UNF_THREADS) {
-            const drillInch = calcTapDrillInch(major, tpi, threadPct);
-            const drillMm = drillInch * 25.4;
-            const drills = findDrillSizes(drillMm, 0.08);
+            const targetHoleInch = calcTapDrillInch(major, tpi, threadPct);
+            const targetHoleMm = targetHoleInch * 25.4;
+
+            const sizeInch = useOversize ? getDrillForTargetHole(targetHoleInch) : targetHoleInch;
+            const sizeMm = sizeInch * 25.4;
+            const drills = findDrillSizes(sizeMm, 0.08);
 
             const row = document.createElement('tr');
+            row.dataset.type = 'inch';
+            row.dataset.major = major;
+            row.dataset.pitch = tpi;
             row.innerHTML = `
                 <td class="thread-size">${name}-${tpi}</td>
-                <td>${formatDrillCell(drills, 'metric')}</td>
-                <td>${formatDrillCell(drills, 'inch')}</td>
+                <td>${formatMmCell(sizeMm, sizeInch, useOversize)}</td>
+                <td>${formatInchCell(sizeMm, sizeInch, useOversize)}</td>
                 <td>${formatDrillCell(drills, 'frac')}</td>
                 <td>${formatDrillCell(drills, 'letter')}</td>
             `;
+            row.addEventListener('click', () => handleRowClick(row));
             unfBody.appendChild(row);
         }
 
@@ -1377,41 +1496,109 @@
         const metricBody = document.querySelector('#metric-table tbody');
         metricBody.innerHTML = '';
         for (const [major, pitch] of METRIC_COARSE) {
-            const drillMm = calcTapDrillMm(major, pitch, threadPct);
-            const drills = findDrillSizes(drillMm, 0.08);
+            const targetHoleMm = calcTapDrillMm(major, pitch, threadPct);
+            const targetHoleInch = targetHoleMm / 25.4;
+
+            const sizeInch = useOversize ? getDrillForTargetHole(targetHoleInch) : targetHoleInch;
+            const sizeMm = sizeInch * 25.4;
+            const drills = findDrillSizes(sizeMm, 0.08);
 
             const row = document.createElement('tr');
+            row.dataset.type = 'metric';
+            row.dataset.major = major;
+            row.dataset.pitch = pitch;
             row.innerHTML = `
                 <td class="thread-size">M${major}×${pitch}</td>
-                <td>${formatDrillCell(drills, 'metric')}</td>
-                <td>${formatDrillCell(drills, 'inch')}</td>
+                <td>${formatMmCell(sizeMm, sizeInch, useOversize)}</td>
+                <td>${formatInchCell(sizeMm, sizeInch, useOversize)}</td>
                 <td>${formatDrillCell(drills, 'frac')}</td>
                 <td>${formatDrillCell(drills, 'letter')}</td>
             `;
+            row.addEventListener('click', () => handleRowClick(row));
             metricBody.appendChild(row);
         }
     }
 
-    // Forward declaration for custom result updater
+    /**
+     * Handle click on a table row - populate custom calculator
+     */
+    function handleRowClick(row) {
+        const type = row.dataset.type;
+        const major = parseFloat(row.dataset.major);
+        const pitch = parseFloat(row.dataset.pitch);
+
+        // Select the row visually
+        selectRow(row);
+
+        // Set the radio button for metric/inch
+        if (type === 'metric') {
+            document.querySelector('input[name="custom-type"][value="metric"]').checked = true;
+            // Update unit labels
+            document.getElementById('major-unit').textContent = 'mm';
+            document.getElementById('pitch-unit').textContent = 'mm';
+        } else {
+            document.querySelector('input[name="custom-type"][value="inch"]').checked = true;
+            // Update unit labels
+            document.getElementById('major-unit').textContent = 'in';
+            document.getElementById('pitch-unit').textContent = 'TPI';
+        }
+
+        // Set the values
+        customMajor.value = major;
+        customPitch.value = pitch;
+
+        // Update the result
+        updateCustomResult();
+
+        // Scroll control panel into view
+        document.querySelector('.control-panel').scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest'
+        });
+    }
+
+    // Forward declarations
     let updateCustomResult = function() {};
 
+    /**
+     * Update table column headers based on oversize toggle state
+     */
+    function updateColumnHeaders() {
+        const useOversize = isOversizeEnabled();
+        const mmHeaders = document.querySelectorAll('.col-mm');
+        const inHeaders = document.querySelectorAll('.col-in');
+
+        if (useOversize) {
+            // When oversize is enabled: show drill recommendations
+            mmHeaders.forEach(th => {
+                th.textContent = 'Drill (mm)';
+                th.title = 'Recommended drill size in mm (undersized to account for oversize)';
+            });
+            inHeaders.forEach(th => {
+                th.textContent = 'Drill (in)';
+                th.title = 'Recommended drill size in inches (undersized to account for oversize)';
+            });
+        } else {
+            // When oversize is disabled: show hole diameter (drill = hole)
+            mmHeaders.forEach(th => {
+                th.textContent = 'Hole Ø (mm)';
+                th.title = 'Target hole diameter for selected thread %';
+            });
+            inHeaders.forEach(th => {
+                th.textContent = 'Hole Ø (in)';
+                th.title = 'Target hole diameter for selected thread %';
+            });
+        }
+    }
+
     function updateAll(pct) {
-        pctValue.textContent = pct;
-        updateWarning(pct);
+        updatePctDisplay(pct);
+        updateColumnHeaders();
         updateTables(pct);
         updateCustomResult();
 
-        // Update preset button states
-        presetBtns.forEach(btn => {
-            if (parseInt(btn.dataset.pct) === pct) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
-
         // Set data attribute for print stylesheet
-        document.querySelector('.controls').dataset.pct = pct;
+        document.querySelector('.control-panel').dataset.pct = pct;
     }
 
     // Event listeners
@@ -1419,12 +1606,9 @@
         updateAll(parseInt(e.target.value));
     });
 
-    presetBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const pct = parseInt(btn.dataset.pct);
-            slider.value = pct;
-            updateAll(pct);
-        });
+    // Oversize toggle listener
+    oversizeToggle.addEventListener('change', () => {
+        updateAll(parseInt(slider.value));
     });
 
     // ==========================================================================
@@ -1447,43 +1631,57 @@
         const pitch = parseFloat(customPitch.value);
         const pct = parseInt(slider.value) / 100;
 
-        // Hide result if inputs are invalid/empty
+        // Show placeholder if inputs are invalid/empty
         if (isNaN(major) || isNaN(pitch) || major <= 0 || pitch <= 0) {
-            customResult.classList.remove('visible');
+            customResult.innerHTML = `<div class="result-row" style="color: var(--text-dim); justify-content: center;">Enter thread dimensions to see results</div>`;
             return;
         }
 
-        let drillMm, threadName;
+        let targetHoleMm, threadName;
         if (getCustomType() === 'metric') {
-            drillMm = calcTapDrillMm(major, pitch, pct);
+            targetHoleMm = calcTapDrillMm(major, pitch, pct);
             threadName = `M${major}×${pitch}`;
         } else {
             // Inch: major is in inches, pitch is TPI
-            const drillInch = calcTapDrillInch(major, pitch, pct);
-            drillMm = drillInch * 25.4;
+            const targetHoleInch = calcTapDrillInch(major, pitch, pct);
+            targetHoleMm = targetHoleInch * 25.4;
             threadName = `${major}"-${pitch} TPI`;
         }
 
-        const drills = findDrillSizes(drillMm, 0.08);
-        const drillInch = drillMm / 25.4;
+        const targetHoleInch = targetHoleMm / 25.4;
+
+        // Calculate drill size (with oversize adjustment)
+        const drillInch = getDrillForTargetHole(targetHoleInch);
+        const drillMm = drillInch * 25.4;
+        const oversize = getDrillOversize(drillInch);
+
+        // Find drill matches for both hole size and drill size
+        const holeDrills = findDrillSizes(targetHoleMm, 0.08);
+        const drillDrills = findDrillSizes(drillMm, 0.08);
+
+        // Color based on compensation toggle: green = what tables show, dim = secondary info
+        const useOversize = isOversizeEnabled();
+        const holeColor = useOversize ? 'var(--text-dim)' : 'var(--success)';
+        const drillColor = useOversize ? 'var(--success)' : 'var(--text-dim)';
 
         let html = `<div class="result-row"><span class="result-label">Thread:</span><strong>${threadName} @ ${slider.value}%</strong></div>`;
-        html += `<div class="result-row"><span class="result-label">Tap Drill:</span><span>${drillMm.toFixed(3)} mm / ${drillInch.toFixed(4)}"</span></div>`;
 
-        // Metric
-        html += `<div class="result-row"><span class="result-label">Metric:</span>${formatDrillCell(drills, 'metric')}</div>`;
+        // Section header: Hole (reamer/perfect)
+        html += `<div class="result-row" style="border-top: 1px solid var(--accent); margin-top: 0.25rem; padding-top: 0.5rem;"><span class="result-label" style="color: ${holeColor}; font-weight: bold;">Hole Ø</span><span style="color: var(--text-dim); font-size: 0.8em;">(reamer / perfect)</span></div>`;
+        html += `<div class="result-row"><span class="result-label">Size:</span><span>${targetHoleMm.toFixed(3)} mm / ${targetHoleInch.toFixed(4)}"</span></div>`;
+        html += `<div class="result-row"><span class="result-label">Fractional:</span>${formatDrillCell(holeDrills, 'frac')}</div>`;
+        html += `<div class="result-row"><span class="result-label">Letter/#:</span>${formatDrillCell(holeDrills, 'letter')}</div>`;
 
-        // Decimal
-        html += `<div class="result-row"><span class="result-label">Decimal:</span>${formatDrillCell(drills, 'inch')}</div>`;
+        // Section header: Drill (with oversize compensation)
+        html += `<div class="result-row" style="border-top: 1px solid var(--accent); margin-top: 0.25rem; padding-top: 0.5rem;"><span class="result-label" style="color: ${drillColor}; font-weight: bold;">Drill</span><span style="color: var(--text-dim); font-size: 0.8em;">(compensated for oversize)</span></div>`;
+        html += `<div class="result-row"><span class="result-label">Size:</span><span>${drillMm.toFixed(3)} mm / ${drillInch.toFixed(4)}"</span></div>`;
+        html += `<div class="result-row"><span class="result-label">Fractional:</span>${formatDrillCell(drillDrills, 'frac')}</div>`;
+        html += `<div class="result-row"><span class="result-label">Letter/#:</span>${formatDrillCell(drillDrills, 'letter')}</div>`;
 
-        // Fractional
-        html += `<div class="result-row"><span class="result-label">Fractional:</span>${formatDrillCell(drills, 'frac')}</div>`;
-
-        // Letter/Number
-        html += `<div class="result-row"><span class="result-label">Letter/#:</span>${formatDrillCell(drills, 'letter')}</div>`;
+        // Oversize info at the bottom
+        html += `<div class="result-row" style="border-top: 1px solid var(--accent); margin-top: 0.25rem; padding-top: 0.5rem;"><span class="result-label">Exp. Oversize:</span><span>+${(oversize.mean * 25.4).toFixed(3)} mm / +${(oversize.mean * 1000).toFixed(1)} thou</span></div>`;
 
         customResult.innerHTML = html;
-        customResult.classList.add('visible');
     };
 
     // Update unit labels when type changes
@@ -1492,13 +1690,13 @@
             if (getCustomType() === 'metric') {
                 majorUnit.textContent = 'mm';
                 pitchUnit.textContent = 'mm';
-                customMajor.placeholder = 'e.g. 20';
-                customPitch.placeholder = 'e.g. 1.5';
+                customMajor.placeholder = '20';
+                customPitch.placeholder = '1.5';
             } else {
                 majorUnit.textContent = 'in';
                 pitchUnit.textContent = 'TPI';
-                customMajor.placeholder = 'e.g. 0.5';
-                customPitch.placeholder = 'e.g. 13';
+                customMajor.placeholder = '0.5';
+                customPitch.placeholder = '13';
             }
             updateCustomResult();
         });
