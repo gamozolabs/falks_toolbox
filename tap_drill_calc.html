@@ -229,6 +229,11 @@
             cursor: help;
         }
 
+        /* Print-only summary (hidden on screen) */
+        .print-summary {
+            display: none;
+        }
+
         /* Material preset buttons */
         .preset-btns {
             display: flex;
@@ -574,21 +579,20 @@
             }
 
             .control-panel {
-                background: none;
-                padding: 0.5rem 0;
-                border-bottom: 1px solid #ccc;
-                margin-bottom: 0.5rem;
-            }
-
-            .control-options {
                 display: none;
             }
 
-            /* Show current percentage as text for print */
-            .control-panel::after {
-                content: "Thread Engagement: " attr(data-pct) "%";
-                font-size: 14pt;
-                font-weight: bold;
+            /* Print-only summary shown via JS */
+            .print-summary {
+                display: block !important;
+                border: 1px solid #ccc;
+                padding: 0.5rem 0.75rem;
+                margin-bottom: 1rem;
+                font-size: 11pt;
+            }
+
+            .print-summary strong {
+                font-size: 12pt;
             }
 
             .tables-container {
@@ -739,6 +743,8 @@
             <div id="custom-result"></div>
         </div>
     </div>
+
+    <div class="print-summary" id="print-summary"></div>
 
     <div class="tables-container">
         <div class="table-section">
@@ -1351,9 +1357,19 @@
     const pctValue = document.getElementById('pct-value');
     const pctLabel = document.getElementById('pct-label');
     const oversizeToggle = document.getElementById('oversize-toggle');
+    const printSummary = document.getElementById('print-summary');
 
     function isOversizeEnabled() {
         return oversizeToggle.checked;
+    }
+
+    /**
+     * Update print-only summary with current settings
+     */
+    function updatePrintSummary(pct) {
+        const useOversize = isOversizeEnabled();
+        const columnType = useOversize ? 'Drill size (with oversize compensation)' : 'Hole diameter (no compensation)';
+        printSummary.innerHTML = `<strong>Thread Engagement: ${pct}%</strong> &nbsp;|&nbsp; Columns show: ${columnType}`;
     }
 
     /**
@@ -1364,15 +1380,12 @@
         if (pct >= 75) {
             color = 'var(--danger)';
             msg = 'High tap breakage risk. No strength benefit over 60% (MH p.2020).';
-        } else if (pct >= 65) {
+        } else if (pct > 65) {
             color = 'var(--warning)';
-            msg = 'Above 60% threshold — diminishing returns, higher torque required.';
-        } else if (pct >= 55) {
-            color = 'var(--success)';
-            msg = 'Recommended range. Good balance of strength and tapping torque.';
+            msg = 'Above 65% — diminishing returns, higher torque required.';
         } else if (pct >= 50) {
             color = 'var(--success)';
-            msg = 'Light engagement. Good for stainless and difficult materials.';
+            msg = 'Recommended range. Good balance of strength and tapping torque.';
         } else {
             color = 'var(--warning)';
             msg = 'Very light engagement. Verify adequate for load requirements.';
@@ -1650,9 +1663,7 @@
         updateColumnHeaders();
         updateTables(pct);
         updateCustomResult();
-
-        // Set data attribute for print stylesheet
-        document.querySelector('.control-panel').dataset.pct = pct;
+        updatePrintSummary(pct);
     }
 
     // Event listeners
